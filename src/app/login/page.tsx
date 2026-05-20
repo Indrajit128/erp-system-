@@ -105,10 +105,10 @@ export default function LoginPage() {
             color: '#0a2540',
             letterSpacing: '-0.5px'
           }}>
-            BillFlow
+            Rovo Chinasourcing
           </h1>
           <p style={{ color: '#475569', marginTop: 6, fontSize: '14px', fontWeight: 500 }}>
-            Import Logistics Billing Platform
+            Chinasourcing Billing Module
           </p>
         </div>
 
@@ -266,7 +266,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <p style={{ textAlign: 'center', color: '#64748b', fontSize: '13px', marginTop: 24, fontWeight: 500 }}>
-          China ↔ India Sea & Air Cargo Logistics Gateway
+          Rovo Chinasourcing Gateway
         </p>
       </div>
     </div>

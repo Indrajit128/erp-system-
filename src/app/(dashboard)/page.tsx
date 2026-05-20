@@ -5,7 +5,7 @@ export default function DashboardPage() {
     <div>
       <div className="page-header" style={{ paddingBottom: 24 }}>
         <h1 style={{ fontSize: 22, fontWeight: 700 }}>Dashboard</h1>
-        <p style={{ color: 'var(--text-secondary)', marginTop: 4, fontSize: 13 }}>Welcome to BillFlow — your import logistics billing hub.</p>
+        <p style={{ color: 'var(--text-secondary)', marginTop: 4, fontSize: 13 }}>Welcome to Rovo Chinasourcing — your import logistics billing hub.</p>
       </div>
       <div className="page-body">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>

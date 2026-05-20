@@ -10,7 +10,7 @@ model Profile {
   id              String   @id @db.Uuid
   email           String   @unique
   fullName        String?  @map("full_name")
-  companyName     String?  @default("China India Import Logistics") @map("company_name")
+  companyName     String?  @default("Rovo Chinasourcing") @map("company_name")
   companyAddress  String?  @map("company_address")
   companyGstin    String?  @map("company_gstin")
   companyPhone    String?  @map("company_phone")

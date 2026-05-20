@@ -29,8 +29,8 @@ export default function Sidebar() {
             display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16
           }}>⚡</div>
           <div>
-            <div style={{ fontWeight: 700, fontSize: 14 }}>BillFlow</div>
-            <div style={{ color: 'var(--text-muted)', fontSize: 10 }}>Import Logistics</div>
+            <div style={{ fontWeight: 700, fontSize: 14 }}>Rovo Chinasourcing</div>
+            <div style={{ color: 'var(--text-muted)', fontSize: 10 }}>Import Logistics Module</div>
           </div>
         </div>
       </div>

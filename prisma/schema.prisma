@@ -1,0 +1,110 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Profile {
+  id              String   @id @db.Uuid
+  email           String   @unique
+  fullName        String?  @map("full_name")
+  companyName     String?  @default("China India Import Logistics") @map("company_name")
+  companyAddress  String?  @map("company_address")
+  companyGstin    String?  @map("company_gstin")
+  companyPhone    String?  @map("company_phone")
+  logoUrl         String?  @map("logo_url")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("profiles")
+}
+
+model Customer {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  companyName String    @map("company_name")
+  gstNo       String    @map("gst_no")
+  address     String
+  phone       String
+  email       String?
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  invoices    Invoice[]
+
+  @@map("customers")
+}
+
+model Product {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String   @map("user_id") @db.Uuid
+  articleNo      String   @map("article_no")
+  name           String
+  imageUrl       String?  @map("image_url")
+  price          Decimal  @default(0.00) @db.Decimal(12, 2)
+  gstPercentage  Decimal  @default(18.00) @map("gst_percentage") @db.Decimal(5, 2)
+  hsnCode        String   @map("hsn_code")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("products")
+}
+
+model Invoice {
+  id                 String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId             String        @map("user_id") @db.Uuid
+  invoiceNo          String        @map("invoice_no")
+  customerId         String        @map("customer_id") @db.Uuid
+  carryingPercentage Decimal       @default(0.00) @map("carrying_percentage") @db.Decimal(5, 2)
+  gstPercentage      Decimal       @default(9.00) @map("gst_percentage") @db.Decimal(5, 2)
+  subtotal           Decimal       @default(0.00) @db.Decimal(12, 2)
+  gst                Decimal       @default(0.00) @db.Decimal(12, 2)
+  carrying           Decimal       @default(0.00) @db.Decimal(12, 2)
+  grandTotal         Decimal       @default(0.00) @map("grand_total") @db.Decimal(12, 2)
+  pdfUrl             String?       @map("pdf_url")
+  billingType        BillingType   @default(TYPE_C) @map("billing_type")
+  createdAt          DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  customer           Customer      @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  items              InvoiceItem[]
+  payments           Payment[]
+
+  @@map("invoices")
+}
+
+enum BillingType {
+  TYPE_A
+  TYPE_B
+  TYPE_C
+}
+
+model InvoiceItem {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  invoiceId     String   @map("invoice_id") @db.Uuid
+  articleNo     String   @map("article_no")
+  productName   String   @map("product_name")
+  productImage  String?  @map("product_image")
+  hsnCode       String?  @map("hsn_code")
+  quantity      Int      @default(1)
+  price         Decimal  @default(0.00) @db.Decimal(12, 2)
+  gstPercentage Decimal  @default(18.00) @map("gst_percentage") @db.Decimal(5, 2)
+  total         Decimal  @default(0.00) @db.Decimal(12, 2)
+  invoice       Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@map("invoice_items")
+}
+
+model Payment {
+  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  invoiceId     String        @map("invoice_id") @db.Uuid
+  amount        Decimal       @default(0.00) @db.Decimal(12, 2)
+  paymentStatus PaymentStatus @map("payment_status")
+  paymentDate   DateTime      @default(now()) @map("payment_date") @db.Timestamptz
+  invoice       Invoice       @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  PARTIAL
+  FAILED
+}

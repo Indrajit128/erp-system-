@@ -45,11 +45,15 @@ export default function NewInvoicePage() {
   const [mHsn, setMHsn] = useState('')
   const [mGst, setMGst] = useState('18')
   const [mImg, setMImg] = useState('')
+  const [invoiceDate, setInvoiceDate] = useState('')
 
   // Load customer and initial product lists
   useEffect(() => {
     fetchCustomers()
     fetchProducts()
+    
+    // Set client-side date safely to prevent SSR hydration mismatch
+    setInvoiceDate(new Date().toLocaleDateString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' }))
     
     // Auto-generate invoice number if empty
     if (!invoiceNo) {
@@ -534,7 +538,7 @@ export default function NewInvoicePage() {
                 <div style={{ fontSize: 16, fontWeight: 800, color: '#333' }}>INVOICE PREVIEW</div>
                 <div style={{ marginTop: 2 }}>
                   <strong>No:</strong> {invoiceNo || 'INV-XXXXXX'}<br/>
-                  <strong>Date:</strong> {new Date().toLocaleDateString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' })}<br/>
+                  <strong>Date:</strong> {invoiceDate || '—'}<br/>
                   <span style={{ fontSize: 9, fontWeight: 'bold', background: '#eee', padding: '1px 4px', borderRadius: 2 }}>
                     {billingType === 'TYPE_A' ? 'Type A (No GST)' : billingType === 'TYPE_B' ? 'Type B (GST Info)' : 'Type C (Full GST)'}
                   </span>

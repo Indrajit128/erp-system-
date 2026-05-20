@@ -41,9 +41,19 @@ export async function proxy(request: NextRequest) {
   // Route protection logic
   const isLoginPage = request.nextUrl.pathname.startsWith('/login')
   const isPublicApi = request.nextUrl.pathname.startsWith('/api/invoices/') && request.nextUrl.pathname.endsWith('/pdf')
+  const isRegisterApi = request.nextUrl.pathname === '/api/auth/register'
   
-  if (!user && !isLoginPage && !isPublicApi && !request.nextUrl.pathname.startsWith('/_next') && request.nextUrl.pathname !== '/favicon.ico') {
-    // Redirect to login page if not logged in
+  if (!user) {
+    if (isLoginPage || isPublicApi || isRegisterApi || request.nextUrl.pathname.startsWith('/_next') || request.nextUrl.pathname === '/favicon.ico') {
+      return response
+    }
+
+    // For API requests, return JSON 401 instead of redirecting to login HTML
+    if (request.nextUrl.pathname.startsWith('/api/')) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    // Redirect unauthenticated page requests to login page
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)
